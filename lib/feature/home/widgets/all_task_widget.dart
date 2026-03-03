@@ -2,20 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:taskati/core/constant/app_images.dart';
 import 'package:taskati/core/functions/extensions.dart';
+import 'package:taskati/core/model/task_model.dart';
+import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 import 'package:taskati/feature/home/data/all_task_data.dart';
 
-class AllTaskWidget extends StatelessWidget {
-  const AllTaskWidget({
-    super.key,
-  });
+class AllTaskWidget extends StatefulWidget {
+  const AllTaskWidget({super.key});
+
+  @override
+  State<AllTaskWidget> createState() => _AllTaskWidgetState();
+}
+
+class _AllTaskWidgetState extends State<AllTaskWidget> {
+  List<TaskModel> tasks = [];
+  @override
+  void initState() {
+   tasks= HiveHelper.taskBox.values.toList();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
       separatorBuilder: (context, index) => 18.H,
-      itemCount: allTaskData.length,
+      itemCount: tasks.length,
       itemBuilder: (context, index) => Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -34,14 +46,14 @@ class AllTaskWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                allTaskData[index].title,
+                tasks[index].title,
                 style: TextStyles.body.copyWith(
                   color: AppColors.blackColor,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
-                allTaskData[index].description,
+                tasks[index].description,
                 style: TextStyles.caption1.copyWith(
                   color: AppColors.secondaryColor,
                 ),
@@ -49,11 +61,7 @@ class AllTaskWidget extends StatelessWidget {
               10.H,
               Row(
                 children: [
-                  SvgPicture.asset(
-                    AppImages.timeSvg,
-                    width: 20,
-                    height: 20,
-                  ),
+                  SvgPicture.asset(AppImages.timeSvg, width: 20, height: 20),
                   10.W,
                   Text(
                     "10:00 AM - 12:00 AM",
@@ -66,8 +74,7 @@ class AllTaskWidget extends StatelessWidget {
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                       minimumSize: Size.zero,
-                      tapTargetSize:
-                          MaterialTapTargetSize.shrinkWrap,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       backgroundColor: AppColors.accentColor,
                     ),
                     onPressed: () {},

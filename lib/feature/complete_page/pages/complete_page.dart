@@ -7,7 +7,7 @@ import 'package:svg_flutter/svg.dart';
 import 'package:taskati/core/constant/app_images.dart';
 import 'package:taskati/core/functions/extensions.dart';
 import 'package:taskati/core/functions/navigations.dart';
-import 'package:taskati/core/services/shared_pref.dart';
+import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 import 'package:taskati/core/widgets/custom_text_form_field.dart';
@@ -104,8 +104,8 @@ class _CompletePageState extends State<CompletePage> {
           text: "Let's Start",
           onPressed: () async {
             if (path != null && controller.text.isNotEmpty) {
-              await SharedPref.setUsertData(controller.text, path!);
-              await SharedPref.setBool(SharedPref.isUploadedKey, true);
+              await HiveHelper.setData(controller.text, path!);
+              await HiveHelper.cashData(HiveHelper.isUploadedKey, true);
               Navigations.pushReplacement(context, HomeScreen());
             } else if (path != null && controller.text.isEmpty) {
               ScaffoldMessenger.of(

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:taskati/core/services/shared_pref.dart';
+import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 
@@ -25,8 +25,8 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   }
 
   Future<void> getCashedData() async {
-    name = SharedPref.getString(SharedPref.nameKey);
-    path = SharedPref.getString(SharedPref.imageKey);
+    name = HiveHelper.getData(HiveHelper.nameKey);
+    path = HiveHelper.getData(HiveHelper.imageKey);
     setState(() {});
   }
 

@@ -2,8 +2,10 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:taskati/core/functions/extensions.dart';
+import 'package:taskati/core/functions/navigations.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
+import 'package:taskati/feature/add_task/pages/add_task_screen.dart';
 import 'package:taskati/feature/home/widgets/all_task_widget.dart';
 import 'package:taskati/feature/home/widgets/in_progress_widget.dart';
 import 'package:taskati/feature/home/widgets/profile_header.dart';
@@ -92,7 +94,9 @@ class HomeScreen extends StatelessWidget {
           borderRadius: BorderRadiusGeometry.circular(30),
         ),
         backgroundColor: AppColors.primaryColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigations.pushTo(context, AddTaskScreen());
+        },
         child: Icon(Icons.add, color: Colors.white),
       ),
     );
