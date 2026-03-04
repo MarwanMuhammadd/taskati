@@ -7,7 +7,6 @@ import 'package:taskati/core/functions/extensions.dart';
 import 'package:taskati/core/functions/navigations.dart';
 import 'package:taskati/core/model/task_model.dart';
 import 'package:taskati/core/services/hive_helper.dart';
-import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 import 'package:taskati/core/widgets/custom_text_form_field.dart';
 import 'package:taskati/core/widgets/main_button.dart';
@@ -15,23 +14,32 @@ import 'package:taskati/feature/add_task/widgets/card_for_tasks.dart';
 import 'package:taskati/feature/home/pages/home_screen.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+  const AddTaskScreen({super.key, this.task});
+  final TaskModel? task;
 
   @override
   State<AddTaskScreen> createState() => _AddTaskScreenState();
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  String _date = DateFormat("dd MMM, yyyy").format(DateTime.now());
-  String _startTime = DateFormat("hh:mm a").format(DateTime.now());
-  String _endTime = DateFormat("hh:mm a").format(DateTime.now());
+  late String _date = _date;
+  late String _startTime = _startTime;
+  late String _endTime = _endTime;
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
 
   @override
   void initState() {
-    _titleController = TextEditingController();
-    _descriptionController = TextEditingController();
+    _titleController = TextEditingController(text: widget.task?.title ?? "");
+    _descriptionController = TextEditingController(
+      text: widget.task?.description ?? "",
+    );
+    _date =
+        widget.task?.date ?? DateFormat("dd MMM, yyyy").format(DateTime.now());
+    _startTime =
+        widget.task?.startTime ?? DateFormat("hh:mm a").format(DateTime.now());
+    _endTime =
+        widget.task?.endTime ?? DateFormat("hh:mm a").format(DateTime.now());
     super.initState();
   }
 
@@ -51,9 +59,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           onPressed: () {
             Navigations.pop(context);
           },
-          icon: SvgPicture.asset(AppImages.backSvg, width: 24, height: 24),
+          icon: SvgPicture.asset(
+            AppImages.backSvg,
+            width: 24,
+            height: 24,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
-        title: Text("Add Task"),
+        title: Text(widget.task != null ? "Edit" : "Add Task"),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -61,21 +74,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Title",
-                style: TextStyles.caption1.copyWith(
-                  color: AppColors.secondaryColor,
-                ),
-              ),
+              Text("Title", style: TextStyles.caption1),
               Gap(8),
               CustomTextFormField(controller: _titleController),
               Gap(18),
-              Text(
-                "Description",
-                style: TextStyles.caption1.copyWith(
-                  color: AppColors.secondaryColor,
-                ),
-              ),
+              Text("Description", style: TextStyles.caption1),
               Gap(8),
               CustomTextFormField(
                 maxLines: 4,
@@ -123,21 +126,36 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
         child: MainButton(
-          text: "Add Task",
-          onPressed: () async {
-            String id = DateTime.now().millisecondsSinceEpoch.toString();
-            await HiveHelper.cashTaskData(
-              id,
-              TaskModel(
-                id: id,
-                title: _titleController.text,
-                description: _descriptionController.text,
-                date: _date,
-                startTime: _startTime,
-                isCompleted: false,
-                endTime: _endTime,
-              ),
-            );
+          text: widget.task != null ? "Save " : "Add Task",
+          onPressed: () {
+            if (widget.task != null) {
+              HiveHelper.cashTaskData(
+                widget.task!.id,
+                TaskModel(
+                  id: widget.task!.id,
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  date: _date,
+                  startTime: _startTime,
+                  isCompleted: false,
+                  endTime: _endTime,
+                ),
+              );
+            } else {
+              String id = DateTime.now().millisecondsSinceEpoch.toString();
+              HiveHelper.cashTaskData(
+                id,
+                TaskModel(
+                  id: id,
+                  title: _titleController.text,
+                  description: _descriptionController.text,
+                  date: _date,
+                  startTime: _startTime,
+                  isCompleted: false,
+                  endTime: _endTime,
+                ),
+              );
+            }
             Navigations.pushReplacement(context, HomeScreen());
           },
         ),

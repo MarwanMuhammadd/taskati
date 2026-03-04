@@ -1,19 +1,30 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:taskati/core/functions/extensions.dart';
 import 'package:taskati/core/functions/navigations.dart';
+import 'package:taskati/core/model/task_model.dart';
+import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 import 'package:taskati/feature/add_task/pages/add_task_screen.dart';
 import 'package:taskati/feature/home/widgets/all_task_widget.dart';
-import 'package:taskati/feature/home/widgets/in_progress_widget.dart';
 import 'package:taskati/feature/home/widgets/profile_header.dart';
 import 'package:taskati/feature/home/widgets/today_progress.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final DatePickerController? controller = DatePickerController();
+
+  String _selectedDate = DateFormat("dd MMM, yyyy").format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +52,9 @@ class HomeScreen extends StatelessWidget {
 
                   onDateChange: (date) {
                     // New date selected
-                    // setState(() {
-                    //   _selectedValue = date;
-                    // });
+                    setState(() {
+                      _selectedDate = DateFormat("dd MMM, yyyy").format(date);
+                    });
                   },
                 ),
                 8.H,
@@ -75,12 +86,27 @@ class HomeScreen extends StatelessWidget {
                 ),
                 20.H,
                 Expanded(
-                  child: TabBarView(
-                    children: [
-                      AllTaskWidget(),
-                      InprogressWidget(),
-                      InprogressWidget(),
-                    ],
+                  child: ValueListenableBuilder<Box<TaskModel>>(
+                    valueListenable: HiveHelper.taskBox.listenable(),
+                    builder: (context, box, child) {
+                      final dailyTasks = box.values.toList();
+                      final dailyTasksWithDate = dailyTasks
+                          .where((test) => test.date == _selectedDate)
+                          .toList();
+                      final inProgressTasks = dailyTasksWithDate
+                          .where((element) => !element.isCompleted)
+                          .toList();
+                      final completedTasks = dailyTasksWithDate
+                          .where((element) => element.isCompleted)
+                          .toList();
+                      return TabBarView(
+                        children: [
+                          AllTaskWidget(tasks: dailyTasksWithDate),
+                          AllTaskWidget(tasks: inProgressTasks),
+                          AllTaskWidget(tasks: completedTasks),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

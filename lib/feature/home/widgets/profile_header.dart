@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:taskati/core/constant/app_images.dart';
 import 'package:taskati/core/services/hive_helper.dart';
-import 'package:taskati/core/styles/app_colors.dart';
 import 'package:taskati/core/styles/text_styles.dart';
 
 class ProfileHeader extends StatefulWidget {
@@ -40,21 +40,31 @@ class _ProfileHeaderState extends State<ProfileHeader> {
             width: 50,
             height: 50,
             fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(AppImages.user);
+            },
           ),
         ),
         Gap(10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Hello!",
-              style: TextStyles.body.copyWith(color: AppColors.blackColor),
-            ),
-            Text(
-              name,
-              style: TextStyles.headline.copyWith(color: AppColors.blackColor),
-            ),
+            Text("Hello!", style: TextStyles.body),
+            Text(name, style: TextStyles.headline),
           ],
+        ),
+        Spacer(),
+        InkWell(
+          onTap: () {
+            bool isDarkMode = HiveHelper.getData(HiveHelper.isDarkKey) == true;
+            HiveHelper.cashData(HiveHelper.isDarkKey, !isDarkMode);
+            setState(() {});
+          },
+          child: Icon(
+            HiveHelper.getData(HiveHelper.isDarkKey)
+                ? Icons.dark_mode
+                : Icons.light_mode,
+          ),
         ),
       ],
     );

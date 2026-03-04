@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskati/core/services/hive_helper.dart';
 import 'package:taskati/core/styles/app_colors.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -12,7 +13,9 @@ class CustomTextFormField extends StatelessWidget {
     this.enabled = true,
     this.onTap,
     this.onChanged,
-    this.controller,  this.minLines = 1,  this.maxLines = 1,
+    this.controller,
+    this.minLines = 1,
+    this.maxLines = 1,
   });
   final String? hintText;
   final Widget? prefixIcon;
@@ -32,7 +35,9 @@ class CustomTextFormField extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppColors.accentprimaryColor,
+            color: HiveHelper.getData(HiveHelper.isDarkKey)
+                ? Colors.grey.shade800
+                : AppColors.accentPrimaryColor,
             blurRadius: 20,
             spreadRadius: 12,
             offset: Offset(0, 4),

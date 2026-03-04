@@ -7,7 +7,7 @@ class TabButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.bgColor = AppColors.accentprimaryColor,
+    this.bgColor = AppColors.accentPrimaryColor,
     this.height = 30,
     this.width = 70,
     this.textStyle,

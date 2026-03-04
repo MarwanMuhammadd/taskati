@@ -26,7 +26,7 @@ class CardForTasks extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
               color: AppColors.secondaryColor.withAlpha(30),
@@ -46,22 +46,17 @@ class CardForTasks extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: TextStyles.caption2.copyWith(
-                      color: AppColors.secondaryColor,
-                    ),
-                  ),
-                  Text(
-                    date,
-                    style: TextStyles.caption1.copyWith(
-                      color: AppColors.blackColor,
-                    ),
-                  ),
+                  Text(title, style: TextStyles.caption2),
+                  Text(date.toString(), style: TextStyles.caption1),
                 ],
               ),
               Spacer(),
-              SvgPicture.asset(AppImages.arrowDownSvg, width: 24, height: 24),
+              SvgPicture.asset(
+                AppImages.arrowDownSvg,
+                width: 24,
+                height: 24,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ],
           ),
         ),

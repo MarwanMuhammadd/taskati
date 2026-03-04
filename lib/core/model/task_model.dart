@@ -13,6 +13,27 @@ class TaskModel {
     required this.description,
     required this.date,
     required this.startTime,
-    required this.isCompleted, required this.endTime,
+    required this.endTime,
+    required this.isCompleted,
   });
+
+  TaskModel copyWith({
+    String? id,
+    String? title,
+    String? description,
+    String? date,
+    String? startTime,
+    String? endTime,
+    bool? isCompleted,
+  }) {
+    return TaskModel(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      date: date ?? this.date,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
 }

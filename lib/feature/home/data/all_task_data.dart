@@ -10,7 +10,7 @@ class AllTaskData {
   AllTaskData({
     required this.title,
     required this.description,
-    this.containerColor=AppColors.accentprimaryColor,
+    this.containerColor=AppColors.accentPrimaryColor,
     this.isCompleted = false,
   });
 }

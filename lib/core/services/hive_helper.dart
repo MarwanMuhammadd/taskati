@@ -1,22 +1,30 @@
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:taskati/core/model/task_model.dart';
 import 'package:taskati/hive/hive_registrar.g.dart';
+
 abstract class HiveHelper {
   static late Box userBox;
   static late Box<TaskModel> taskBox;
 
-  static const String boxName = "userBox";
+  static const String userBoxKey = "userBox";
   static const String taskBoxKey = "taskBox";
 
   static const String nameKey = "name";
   static const String imageKey = "image";
   static const String isUploadedKey = "isUploaded";
+  static const String isDarkKey = "isDark";
   static Future<void> init() async {
     // Register generated adapters before opening typed boxes
     Hive.registerAdapters();
 
-    userBox = await Hive.openBox(HiveHelper.boxName);
-    taskBox = await Hive.openBox<TaskModel>(HiveHelper.taskBoxKey);
+    userBox = await Hive.openBox(HiveHelper.userBoxKey);
+    try {
+      taskBox = await Hive.openBox<TaskModel>(HiveHelper.taskBoxKey);
+    } catch (e) {
+      // If there's a type mismatch error, delete the corrupted box and create a new one
+      await Hive.deleteBoxFromDisk(HiveHelper.taskBoxKey);
+      taskBox = await Hive.openBox<TaskModel>(HiveHelper.taskBoxKey);
+    }
   }
 
   static Future<void> cashData(String key, dynamic value) async {
