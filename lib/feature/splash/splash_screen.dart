@@ -18,15 +18,14 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    bool isUploaded = HiveHelper.getData(HiveHelper.isUploadedKey) == true;
-    isUploaded == true
-        ? Future.delayed(Duration(seconds: 3), () {
-            Navigations.pushReplacement(context, HomeScreen());
-          })
-        : Future.delayed(Duration(seconds: 3), () {
-            Navigations.pushReplacement(context, CompletePage());
-          });
     super.initState();
+    bool isUploaded = HiveHelper.getData(HiveHelper.isUploadedKey) == true;
+    Future.delayed(Duration(seconds: 3), () {
+      Navigations.pushReplacement(
+        context,
+        isUploaded ? HomeScreen() : CompletePage(),
+      );
+    });
   }
 
   @override

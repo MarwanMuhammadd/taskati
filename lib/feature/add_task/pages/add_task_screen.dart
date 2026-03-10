@@ -22,9 +22,9 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  late String _date = _date;
-  late String _startTime = _startTime;
-  late String _endTime = _endTime;
+  late String _date;
+  late String _startTime;
+  late String _endTime;
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
 

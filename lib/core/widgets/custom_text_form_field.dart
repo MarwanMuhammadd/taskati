@@ -35,7 +35,7 @@ class CustomTextFormField extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: HiveHelper.getData(HiveHelper.isDarkKey)
+            color: (HiveHelper.getData(HiveHelper.isDarkKey) ?? false)
                 ? Colors.grey.shade800
                 : AppColors.accentPrimaryColor,
             blurRadius: 20,

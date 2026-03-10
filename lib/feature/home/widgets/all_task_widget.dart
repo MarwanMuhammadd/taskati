@@ -42,7 +42,7 @@ class CardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
       // Specify a key if the Slidable is dismissible.
-      key: const ValueKey(0),
+      key:  ValueKey(task.id),
 
       // The start action pane is the one at the left or the top side.
       startActionPane: ActionPane(
@@ -108,7 +108,7 @@ class CardItem extends StatelessWidget {
             BoxShadow(
               offset: Offset(0, 2),
               blurRadius: 4,
-              color: HiveHelper.getData(HiveHelper.isDarkKey)
+              color: (HiveHelper.getData(HiveHelper.isDarkKey) ?? false)
                   ? AppColors.blackColor
                   : AppColors.accentColor,
             ),
